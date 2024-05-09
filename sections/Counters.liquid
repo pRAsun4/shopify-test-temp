@@ -1,0 +1,275 @@
+{% style %} 
+  .section-header {
+  margin-bottom: 25px; }
+  @media only screen and (min-width: 768px) {
+    .section-header {
+      margin-bottom: 30px; } }
+  .counters--{{ section.id }}{
+    background: {{section.settings.counter_container_bk}};
+    padding: 40px 20px;
+    text-align : center;
+  }
+  .counter-container--{{ section.id}} {
+    display: inline-block;
+  }
+.counter-container--{{ section.id}} .counter-suffix--{{ section.id}} {
+    font-size: {{section.settings.counter-sz}}px;
+    margin: 10px 0;
+    color : {{section.settings.counter-clr}};  
+}
+  .counters--{{ section.id }} .counter--{{ section.id }} {
+    font-size: {{section.settings.counter-sz}}px;
+    margin: 10px 0;
+    color : {{section.settings.counter-clr}};
+  }
+  .counters--{{ section.id }} .count-txt--{{ section.id }}{
+    font-size: {{section.settings.counter-txt-sz}}px;
+    color: {{section.settings.counter-txt-clr}};
+  }
+  img.counter-img--{{ section.id }} {
+    border-radius: {{section.settings.counter_img_border}}%;
+    height: {{section.settings.counter_img_sz}}px;
+    width: {{section.settings.counter_img_sz}}px;
+    object-fit: cover;
+    display : block;
+    margin-left : auto;margin-right : auto;
+  }
+  @media screen and (max-width: 992px) {
+    .mobile-grid {
+      margin: 15px 0px;
+    }
+  }
+    @media screen and (min-width: 750px) {
+        .medium-up--hide {
+    display: none !important; }
+        .grid_counter {
+  list-style-type: none;
+  text-align: center;
+  margin: 0;
+  padding: 20px; 
+        }
+    .medium-up--one-half {
+    width: 50%; }
+  .medium-up--one-third {
+    width: 33.33333%; }
+  .medium-up--one-quarter {
+    width: 25%; }
+        .medium-up--one-fifth {
+    width: 20%; }
+        .grid__item_counter {
+  display: inline-block;
+  padding: 10px;
+    margin:-10px;
+  }
+
+    }
+
+@media only screen and (max-width: 749px) {
+  
+    .grid__item_counter {
+  display: inline-block;
+    }
+    .small--hide {
+    display: none !important; }
+  .counter--template--17395541737717__counters_4fk98G, .counter-suffix--template--17395541737717__counters_4fk98G{
+    font-size:28px !important;
+  }
+  .count-txt--template--17395541737717__counters_4fk98G{
+    font-size:16px !important;
+    font-weight:500 !important;
+  }
+}
+
+@media only screen and (max-width: 749px) {
+  .grid__item_counter {
+    margin: 0 2vw;
+  }
+}
+{% endstyle %} 
+{%- liquid
+    case section.blocks.size
+   when 1
+   assign grid_item_width = ''
+   when 2
+    assign grid_item_width = 'medium-up--one-half'
+    when 3
+    assign grid_item_width = 'medium-up--one-third'
+    when 4
+    assign grid_item_width = 'medium-up--one-quarter'
+    when 5
+    assign grid_item_width = 'medium-up--one-fifth'
+    endcase
+   -%}
+<div class="counters--{{ section.id }} grid_counter {{section.settings.counter-visibility}}">
+            {% if section.settings.title != blank %}         
+   <h2 class="section-header text-left" style="color:{{section.settings.counter-hd}}"> {{section.settings.title}} </h2>                                        
+        {% endif %}      
+   {% for block in section.blocks %}
+   <div class="grid__item_counter mobile-grid {{grid_item_width}}">
+      {% if block.settings.image != blank %}
+      <img src="{{block.settings.image | img_url: ''}}" class="counter-img--{{ section.id }} lazyload" alt="{{ block.settings.quote_image | escape }}">                 
+      {% endif %}
+     <div class="counter-container--{{ section.id}}">
+          {% if block.settings.count-prefix != blank %}
+     <span class="counter-suffix--{{ section.id}}"> {{ block.settings.count-prefix }}</span>
+       {% endif %}
+      <span class="counter--{{ section.id }}">{{block.settings.count-target}} </span>
+     {% if block.settings.count-suffix != blank %}
+     <span class="counter-suffix--{{ section.id}}"> {{ block.settings.count-suffix }}</span>
+       {% endif %}
+     </div>
+      <div class="count-txt--{{ section.id }}">{{block.settings.counter-text}} </div>
+   </div>
+   {% endfor %}
+</div>
+<script>$(function (){function isScrolledIntoView($elem){var docViewTop = $(window).scrollTop();var docViewBottom = docViewTop + $(window).height();var elemTop = $elem.offset().top;var elemBottom = elemTop + $elem.height();return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));}function count($this) {var current = parseInt($this.html(), 10);if (isScrolledIntoView($this) && !$this.data("isCounting") && current < $this.data('count')) {$this.html(++current);$this.data("isCounting", true);setTimeout(function (){$this.data("isCounting", false);count($this);},{{section.settings.counter-anim-duration}});}}$(".counter--{{ section.id }}").each(function (){$(this).data('count', parseInt($(this).html(), 10));$(this).html('0');$(this).data("isCounting", false);});function startCount(){$(".counter--{{ section.id }}").each(function (){count($(this));});};$(window).scroll(function(){startCount();});startCount();});  </script>  
+{% schema %}
+{
+  "name": "Counter",
+  "max_blocks": 5,
+    "class": "section",
+  "settings": [
+    {
+   "type": "radio",
+   "id": "counter-visibility",
+   "options": [
+      { "value": "medium-up--hide", 
+        "label": "Mobile only"
+        },
+      { "value": "small--hide", 
+        "label": "Desktop only"
+      },
+      { "value": "showboth",
+                "label": "Both"
+      }
+   ],
+          "label": "Visibility",
+"default":   "showboth"
+},
+      {
+        "type": "color",
+        "id": "counter_container_bk",
+        "label": "Background",
+        "default": "#0f479a"
+      },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Counter"
+    },
+      {
+        "type": "color",
+        "id": "counter-hd",
+        "label": "Heading",
+        "default": "#fff"
+      },
+      {
+        "type": "range",
+        "id": "counter_img_sz",
+        "min": 40,
+        "max": 140,
+        "step": 1,
+        "label": "Image size",
+        "default": 120
+      },
+      {
+        "type": "range",
+        "id": "counter_img_border",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "label": "Image radius",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "counter-sz",
+        "min": 10,
+        "max": 60,
+        "step": 1,
+        "label": "Counter size",
+        "default": 40
+      },
+      {
+        "type": "color",
+        "id": "counter-clr",
+        "label": "Counter color",
+        "default": "#E7E7E7"
+      },
+      {
+        "type": "range",
+        "id": "counter-txt-sz",
+        "min": 10,
+        "max": 60,
+        "step": 1,
+        "label": "Text",
+        "default": 20
+      },
+      {
+        "type": "color",
+        "id": "counter-txt-clr",
+        "label": "Text color",
+        "default": "#fff"
+      },
+    {
+      "type": "text",
+      "id": "counter-anim-duration",
+      "label": "Incrementation duration in milli-seconds",
+      "default": "4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "count-target",
+          "label": "Target",
+          "default": "500"
+        },
+                {
+          "type": "text",
+          "id": "count-suffix",
+          "label": "Suffix"
+        },
+                        {
+          "type": "text",
+          "id": "count-prefix",
+          "label": "Prefix"
+        },
+        {
+          "type": "text",
+          "id": "counter-text",
+          "label": "Text",
+          "default": "text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Counter",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

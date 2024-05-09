@@ -1,0 +1,104 @@
+<style>
+  .itg_logos_wr {
+    padding-top: {{ section.settings.top_padding | default: 0 }}px;
+    padding-bottom: {{ section.settings.bottom_padding | default: 0 }}px;
+    overflow: hidden; /* Hide overflowing logos */
+  }
+
+  .logos_main {
+    white-space: nowrap; /* Prevent logos from wrapping */
+    overflow: hidden; /* Hide overflowing logos */
+    width: 100%; /* Ensure full width of the container */
+  }
+
+  .logos_container {
+    display: inline-block;
+    animation: scrollLogos 17s linear infinite; /* Adjust the animation duration as needed */
+  }
+
+  .logos_img {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 20px; /* Adjust spacing between logos */
+  }
+
+  .logos_img img {
+    max-height: 95px; /* Adjust the maximum height of the images */
+    max-width: 100%; /* Ensure images resize proportionally */
+   width:95px;
+    height: auto; /* Ensure images resize proportionally */
+    margin-right:6vw;
+  }
+
+  @keyframes scrollLogos {
+    0% { transform: translateX(0); } /* Start from the initial position */
+    100% { transform: translateX(-100%); } /* Move to the left edge */
+  }
+</style>
+<div class="itg_logos_wr ">
+  <div class="">
+    <div class="logos_main">
+      <div class="logos_container">
+        {% for block in section.blocks %}
+          {% if block.settings.logos_img != blank %}
+            <div class="logos_img">
+              <img src="{{ block.settings.logos_img | img_url: 'master' }}" alt="{{ block.settings.logos_img.alt | escape }}">
+            </div>
+          {% endif %}
+        {% endfor %}
+        {% for block in section.blocks %}
+          {% if block.settings.logos_img != blank %}
+            <div class="logos_img">
+              <img src="{{ block.settings.logos_img | img_url: 'master' }}" alt="{{ block.settings.logos_img.alt | escape }}">
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Logolist",
+  "class": "shopify-section--bordered",
+  "settings": [
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "Top Padding",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "Bottom Padding",
+      "default": 0,
+      "min": 0,
+      "max": 100,
+      "step": 1
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logos_img",
+      "name": "Logo Image",
+      "settings": [
+        {
+          "id": "logos_img",
+          "type": "image_picker",
+          "label": "Logo Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logolist"
+    }
+  ]
+}
+{% endschema %}
